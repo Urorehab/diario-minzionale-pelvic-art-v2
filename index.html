@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diario Minzionale</title>
+
+  <!-- Manifest per la PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#002739" />
+  <link rel="apple-touch-icon" href="logo.png" />
+
+  <!-- Stili -->
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .logo {
+      max-height: 60px;
+      width: auto;
+      display: block;
+    }
+
+    .link-regole {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #002739;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .link-container {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+  </style>
+
+  <!-- Libreria jsPDF per esportare in PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Bottone "Consulta le Regole Vescicali" -->
+  <div style="text-align: center; margin-top: 20px;">
+  <button onclick="location.href='regole-vescicali.html'">Consulta le Regole Vescicali</button>
+</div>
+
+
+  <!-- Script principale -->
+  <script src="app.js"></script>
+</body>
+</html>
+
+
