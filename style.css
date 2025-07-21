@@ -177,4 +177,13 @@ button:hover {
   color: white;
 }
 
+/* Nuovo stile focus per input e textarea */
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #800080;
+  box-shadow: 0 0 5px #d870d8;
+}
+
+
 
