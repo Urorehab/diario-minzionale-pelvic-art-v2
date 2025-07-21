@@ -5,13 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Diario Minzionale</title>
 
+  <!-- Font Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+
   <!-- Manifest per la PWA -->
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#6a5b81" />
+  <meta name="theme-color" content="#002739" />
   <link rel="apple-touch-icon" href="logo.png" />
 
   <!-- Stili -->
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Lato', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .logo {
+      max-height: 60px;
+      width: auto;
+      display: block;
+    }
+
+    .link-button {
+      display: inline-block;
+      margin: 30px auto 20px auto;
+      padding: 12px 24px;
+      background-color: #002739;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .link-button:hover {
+      background-color: #ce871d;
+      color: #002739;
+    }
+
+    .link-container {
+      text-align: center;
+    }
+  </style>
 
   <!-- Libreria jsPDF per esportare in PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -19,14 +58,19 @@
 <body>
   <div id="app"></div>
 
-  <!-- Bottone "Consulta le Regole Vescicali" -->
-  <div style="text-align: center;">
-    <a href="regole-vescicali.html" class="link-regole">Consulta le Regole Vescicali</a>
+  <!-- Bottone "Consulta le Regole Vescicali" e link al sito -->
+  <div class="contenuto">
+    <div class="link-container">
+      <a class="link-button" href="regole-vescicali.html">Consulta le Regole Vescicali</a>
+    </div>
+
+    <div class="link-container">
+      <a class="link-button" href="https://www.urorehab.it" target="_blank">Maggiori info su Urorehab</a>
+    </div>
   </div>
 
   <!-- Script principale -->
   <script src="app.js"></script>
 </body>
 </html>
-
 

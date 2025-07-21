@@ -18,6 +18,15 @@ const datiSalvatiLiquidi = localStorage.getItem('liquidi');
 if (datiSalvatiMinzioni) minzioni = JSON.parse(datiSalvatiMinzioni);
 if (datiSalvatiLiquidi) liquidi = JSON.parse(datiSalvatiLiquidi);
 
+// Carica nome del paziente salvato
+const nomeSalvato = localStorage.getItem('nomePaziente');
+if (nomeSalvato) {
+  nomePaziente = nomeSalvato;
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('input-paziente').value = nomePaziente;
+  });
+}
+
 function aggiornaOrario() {
   const orario = new Date().toLocaleTimeString('it-IT', {
     hour: '2-digit',
@@ -28,6 +37,7 @@ function aggiornaOrario() {
 
 function aggiornaNomePaziente() {
   nomePaziente = document.getElementById('input-paziente').value.trim();
+  localStorage.setItem('nomePaziente', nomePaziente);
 }
 
 function aggiungiMinzione() {
@@ -50,6 +60,7 @@ function aggiungiLiquido() {
   aggiornaStorico();
   aggiornaRiepilogo();
 }
+
 function datiUltime24Ore() {
   const ora = new Date();
   const cutoff = new Date(ora.getTime() - 24 * 60 * 60 * 1000);
@@ -87,10 +98,14 @@ function azzeraDati() {
     liquidi = [];
     localStorage.removeItem('minzioni');
     localStorage.removeItem('liquidi');
+    localStorage.removeItem('nomePaziente');
+    document.getElementById('input-paziente').value = '';
+    nomePaziente = '';
     aggiornaStorico();
     aggiornaRiepilogo();
   }
 }
+
 function esportaPDF() {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
@@ -100,26 +115,38 @@ function esportaPDF() {
 
   let y = 20;
 
+  const oggi = new Date().toLocaleDateString('it-IT');
+  doc.setFontSize(12);
+  doc.text(`Data: ${oggi}`, 10, y);
+  y += 10;
+
   if (nomePaziente) {
-    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
     doc.text(`Nome: ${nomePaziente}`, 10, y);
+    doc.setFont(undefined, 'normal');
     y += 10;
   }
 
   const dati = datiUltime24Ore();
 
+  doc.setFont(undefined, 'bold');
   doc.text(`Frequenza minzionale: ${dati.numeroMinzioni}`, 10, y);
   y += 8;
   doc.text(`Totale urine espulse: ${dati.volumeTotaleUrina} ml`, 10, y);
   y += 8;
   doc.text(`Totale liquidi assunti: ${dati.volumeTotaleLiquidi} ml`, 10, y);
+  doc.setFont(undefined, 'normal');
   y += 15;
 
   doc.setFontSize(12);
   doc.text("Storico Minzioni", 10, y);
   y += 10;
   minzioni.forEach((m, i) => {
-    doc.text(`${i + 1}. ${new Date(m.data).toLocaleString('it-IT')} - ${m.volume} ml`, 10, y);
+    const ora = new Date(m.data).toLocaleTimeString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    doc.text(`${i + 1}. ${ora} - ${m.volume} ml`, 10, y);
     y += 6;
     if (y > 280) {
       doc.addPage();
@@ -131,7 +158,11 @@ function esportaPDF() {
   doc.text("Storico Liquidi", 10, y);
   y += 10;
   liquidi.forEach((l, i) => {
-    doc.text(`${i + 1}. ${new Date(l.data).toLocaleString('it-IT')} - ${l.volume} ml (${l.tipo})`, 10, y);
+    const ora = new Date(l.data).toLocaleTimeString('it-IT', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    doc.text(`${i + 1}. ${ora} - ${l.volume} ml (${l.tipo})`, 10, y);
     y += 6;
     if (y > 280) {
       doc.addPage();
@@ -143,18 +174,18 @@ function esportaPDF() {
 }
 
 function inviaEmail() {
-  const destinatario = "tessmirella@gmail.com";
+  const destinatario = "urorehab@gmail.com";
   const oggetto = encodeURIComponent("Diario Minzionale - " + nomePaziente);
   const corpo = encodeURIComponent(`Buongiorno,\n\nin allegato il mio diario minzionale.\n\nNome: ${nomePaziente}\n\nGrazie.`);
-
   window.location.href = `mailto:${destinatario}?subject=${oggetto}&body=${corpo}`;
 }
+
 app.innerHTML = `
   <div class="banner">
     <img src="logo.png" alt="Logo Studio" class="logo" style="max-height: 60px; object-fit: contain;" />
     <div>
-      <h1>PELVICART</h1>
-      <p>Riabilitazione del Pavimento Pelvico</p>
+      <h1>Urorehab</h1>
+      <p>Studio di Fisioterapia e Riabilitazione del Pavimento Pelvico</p>
     </div>
   </div>
 
@@ -224,8 +255,9 @@ setInterval(aggiornaOrario, 1000);
 aggiornaStorico();
 aggiornaRiepilogo();
 
-
-
-
-
-
+// Rimuove lo stato attivo dai bottoni su dispositivi touch
+document.querySelectorAll("button").forEach(button => {
+  button.addEventListener("touchend", () => {
+    button.blur();
+  });
+});
